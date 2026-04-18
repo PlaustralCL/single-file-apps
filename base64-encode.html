@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Base64 Encode</title>
+    </head>
+    <body>
+      <h1>Base64 Encode</h1>
+      <h2>Text to encode</h2>
+      <p>Only use ASCII characters. No emojis or non-Latin characters.</p>
+      <textarea id="plainText"
+                rows="10" 
+                cols="30"></textarea>
+      <button onclick="encode()">Encode</button>
+      
+      <h2>Encoded text</h2>
+      <textarea id="encodedText"
+                rows="10" 
+                cols="30" 
+                readonly></textarea>
+      <button id="copyBtn" 
+              onclick="copyToClipboard()">Copy to clipboard</button>
+      
+      <p><a href="base64-decode.html">Decode Base64</a></p>
+      
+      <script>
+        function encode() {
+          const plainTextArea = document.getElementById("plainText");
+          const plainText = plainTextArea.value;
+          const encodedTextArea = document.getElementById("encodedText");
+          encodedTextArea.value = btoa(plainText);        
+        }
+        
+        function copyToClipboard() {
+          const encodedTextArea = document.getElementById("encodedText");
+          const encodedText = encodedTextArea.value;
+          navigator.clipboard.writeText(encodedText).then(
+            () => {
+              /* clipboard successfully set */
+              const copyBtn = document.getElementById("copyBtn")
+              const originalBtnText = copyBtn.textContent;
+              copyBtn.textContent = "Copied!";
+              setTimeout(function () {
+                copyBtn.textContent = originalBtnText;
+              }, 2000);              
+            },
+            () => {
+              /* clipboard write failed */
+              console.log("Copy to clipboard failed.");
+            },
+          );
+        }    
+      </script>
+    </body>
+</html>
