@@ -13,7 +13,7 @@
       <p>QEB NRFZH YOLTK CLU GRJMP LSBO QEB IXWV ALD</p>
       <textarea id="encodedText"
                 rows="10" 
-                cols="30"></textarea>
+                cols="60"></textarea>
       <button onclick="decode()">Decode</button>
       
       <h2>Decoded text</h2>
@@ -21,7 +21,7 @@
       <p>THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG</p>
       <textarea id="plainText"
                 rows="26" 
-                cols="30" 
+                cols="60" 
                 readonly></textarea>
       <button id="copyBtn" 
               onclick="copyToClipboard()">Copy to clipboard</button>
@@ -32,7 +32,7 @@
           const encodedText = encodedTextArea.value;
           
           decodedValues = "";
-          for (i = 0; i <= 26; i++) {
+          for (i = 0; i < 26; i++) {
             decodedValues += ceasarDecode(i, encodedText)
             decodedValues += "\n\n";
           }
@@ -56,7 +56,7 @@
           const letters = {A: 'A'.charCodeAt(),
                            Z: 'Z'.charCodeAt(),
                            a: 'a'.charCodeAt(),
-                           a: 'z'.charCodeAt()}
+                           z: 'z'.charCodeAt()}
           plainCharCodes = encryptedCharCodes.map((num) => {
             if (num >= letters.A && num <= letters.Z) {
               normalizedNum = num - letters.A;
@@ -64,7 +64,7 @@
                 normalizedNum = 26 + normalizedNum;
               }
               return (normalizedNum - shift) % 26 + letters.A;
-            } else if (num >= letters.a && num <= letters.Z) {
+            } else if (num >= letters.a && num <= letters.z) {
                 normalizedNum = num - letters.a;
                 if (normalizedNum - shift < 0) {
                   normalizedNum = 26 + normalizedNum;
