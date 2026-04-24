@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="../icons/clock-favicon.png">
+    <title>Clock</title>
+    <style>
+      .clock {
+        text-align: center;
+        font-size: 4rem;
+      }
+      .toggle {
+        margin-top: 2rem;
+  }
+</style>
+</head>
+<body>
+    <div id="clock" class="clock" data-seconds="false"></div>
+    <div style="text-align: center;">
+      <button id="toggle" class="toggle">Toggle Seconds</button>
+    </div>
+
+    <script>
+      function toggleSeconds() {
+        const toggle = {
+          "true": "false",
+          "false": "true"
+        };
+        const clock = document.getElementById("clock");
+        const currentSetting = clock.dataset.seconds;
+        if (currentSetting == "false") {
+          clock.dataset.seconds = "true";
+        } else {
+          clock.dataset.seconds = "false";
+        }
+        setClock(false);
+      }
+
+      function setClock(whenZero = true) {
+        const options = {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
+        };
+        const pageClock = document.getElementById("clock");
+        const showSeconds = pageClock.dataset.seconds;
+        if (showSeconds == "true") {
+          whenZero = false;
+          options.second = '2-digit';
+        }
+        const now = new Date();
+        if (whenZero && now.getSeconds() != 0) {
+          return;
+        }
+        const timeString = now.toLocaleTimeString('en-US', options);
+        document.title = timeString;
+        pageClock.textContent = timeString;
+      }
+
+      setClock(false);
+      setInterval(setClock, 1000);
+      const toggleBtn = document.getElementById("toggle");
+      toggleBtn.addEventListener('click', toggleSeconds);
+    </script>
+</body>
+</html>
