@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ceasar Encode</title>
+  </head>
+  <body>
+    <h1>Encode Using a Ceasar Cipher</h1>
+    <p>
+      Encode plain text using a Ceasar Cipher. The value of the shift is the key to the cipher.
+      It must be greater than 0.
+    </p>
+
+    <h2>Plain text</h2>
+
+    <textarea id="plainText" rows="10" cols="60"></textarea>
+    <br />
+    <label for="cipherShift">Shift</label>
+    <input type="number" id="cipherShift" name="cipherShift" min="1" value="13" />
+    <button onclick="encode()">Encode</button>
+
+    <h2>Encoded text</h2>
+    <textarea id="cipherText" rows="26" cols="60" readonly></textarea>
+    <button id="copyBtn" onclick="copyToClipboard()">Copy to clipboard</button>
+
+    <script>
+      function encode() {
+        const plainText = document.getElementById("plainText").value;
+        const cipherShift = document.getElementById("cipherShift").value;
+
+        encodedValues = ceasarEncode(Number(cipherShift), plainText);
+
+        const cipherTextArea = document.getElementById("cipherText");
+        cipherTextArea.value = encodedValues;
+      }
+
+      /**
+       * Attempts to decrypt text that has been encrypted using as ceasar
+       * cipher. Only works with ASCII characters
+       * @param {int} shift - The number of letters to shift the alphabet.
+       * @param {encryptedText} - The encrypted text to be decrpyted.
+       */
+      function ceasarEncode(shift, plainText) {
+        plainTextArray = plainText.split("");
+        plainTextCharCodes = plainTextArray.map((char) => char.charCodeAt(0));
+        //console.log(encryptedCharCodes);
+        const letters = { A: "A".charCodeAt(), Z: "Z".charCodeAt(), a: "a".charCodeAt(), z: "z".charCodeAt() };
+        encryptedCharCodes = plainTextCharCodes.map((num) => {
+          if (num >= letters.A && num <= letters.Z) {
+            normalizedNum = num - letters.A;
+            if (normalizedNum - shift < 0) {
+              normalizedNum = 26 + normalizedNum;
+            }
+            return ((normalizedNum + shift) % 26) + letters.A;
+          } else if (num >= letters.a && num <= letters.z) {
+            normalizedNum = num - letters.a;
+            if (normalizedNum - shift < 0) {
+              normalizedNum = 26 + normalizedNum;
+            }
+            return ((normalizedNum + shift) % 26) + letters.a;
+          } else {
+            return num;
+          }
+        });
+        encryptedLetters = encryptedCharCodes.map((num) => String.fromCharCode(num));
+        //console.log(plainLetters);
+        return encryptedLetters.join("");
+      }
+
+      function copyToClipboard() {
+        const plainTextArea = document.getElementById("cipherText");
+        const plainText = plainTextArea.value;
+        navigator.clipboard.writeText(plainText).then(
+          () => {
+            /* clipboard successfully set */
+            const copyBtn = document.getElementById("copyBtn");
+            const originalBtnText = copyBtn.textContent;
+            copyBtn.textContent = "Copied!";
+            setTimeout(function () {
+              copyBtn.textContent = originalBtnText;
+            }, 2000);
+          },
+          () => {
+            /* clipboard write failed */
+            console.log("Copy to clipboard failed.");
+          }
+        );
+      }
+    </script>
+  </body>
+</html>
