@@ -36,15 +36,14 @@
       }
 
       /**
-       * Attempts to decrypt text that has been encrypted using as ceasar
-       * cipher. Only works with ASCII characters
+       * Attempts to encrypt plain text using the provide shift.
+       * Only works with ASCII characters
        * @param {int} shift - The number of letters to shift the alphabet.
        * @param {encryptedText} - The encrypted text to be decrpyted.
        */
       function ceasarEncode(shift, plainText) {
         plainTextArray = plainText.split("");
         plainTextCharCodes = plainTextArray.map((char) => char.charCodeAt(0));
-        //console.log(encryptedCharCodes);
         const letters = { A: "A".charCodeAt(), Z: "Z".charCodeAt(), a: "a".charCodeAt(), z: "z".charCodeAt() };
         encryptedCharCodes = plainTextCharCodes.map((num) => {
           if (num >= letters.A && num <= letters.Z) {
@@ -64,7 +63,6 @@
           }
         });
         encryptedLetters = encryptedCharCodes.map((num) => String.fromCharCode(num));
-        //console.log(plainLetters);
         return encryptedLetters.join("");
       }
 
