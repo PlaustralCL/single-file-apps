@@ -1,97 +1,99 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Ceasar Decode</title>
-    </head>
-    <body>
-      <h1>Decode Ceasar Cipher</h1>
-      <p>A brute force approach to decoding a Ceasar cipher. The results of all possible shifts are displayed. It is up to the user to determine which shift is correct.</p>
-    
-      <h2>Text to decode</h2>
-      <textarea id="encodedText"
-                rows="10" 
-                cols="60"></textarea>
-      <button onclick="decode()">Decode</button>
-      
-      <h2>Decoded text</h2>
-      <textarea id="plainText"
-                rows="26" 
-                cols="60" 
-                readonly></textarea>
-      <button id="copyBtn" 
-              onclick="copyToClipboard()">Copy to clipboard</button>
-      
-      <script>
-        function decode() {
-          const encodedTextArea = document.getElementById("encodedText");
-          const encodedText = encodedTextArea.value;
-          
-          decodedValues = "";
-          for (i = 0; i < 26; i++) {
-            decodedValues += ceasarDecode(i, encodedText)
-            decodedValues += "\n\n";
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ceasar Decode</title>
+    <style>
+      html {
+        max-width: 70ch;
+        padding: 1em 1em;
+        margin: auto;
+        line-height: 1.25;
+        font-size: 1.25em;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Decode Ceasar Cipher</h1>
+    <p>
+      A brute force approach to decoding a Ceasar cipher. The results of all possible shifts are displayed. It is up to
+      the user to determine which shift is correct.
+    </p>
+
+    <h2>Text to decode</h2>
+    <textarea id="encodedText" rows="10" cols="60"></textarea>
+    <button onclick="decode()">Decode</button>
+
+    <h2>Decoded text</h2>
+    <textarea id="plainText" rows="26" cols="60" readonly></textarea>
+    <button id="copyBtn" onclick="copyToClipboard()">Copy to clipboard</button>
+
+    <script>
+      function decode() {
+        const encodedTextArea = document.getElementById("encodedText");
+        const encodedText = encodedTextArea.value;
+
+        decodedValues = "";
+        for (i = 0; i < 26; i++) {
+          decodedValues += ceasarDecode(i, encodedText);
+          decodedValues += "\n\n";
+        }
+
+        const plainTextArea = document.getElementById("plainText");
+        plainTextArea.value = decodedValues;
+      }
+
+      /**
+       * Attempts to decrypt text that has been encrypted using as ceasar
+       * cipher. Only works with ASCII characters
+       * @param {int} shift - The number of letters to shift the alphabet.
+       * @param {encryptedText} - The encrypted text to be decrpyted.
+       */
+      function ceasarDecode(shift, encryptedText) {
+        encryptedArray = encryptedText.split("");
+        encryptedCharCodes = encryptedArray.map((char) => char.charCodeAt(0));
+        const letters = { A: "A".charCodeAt(), Z: "Z".charCodeAt(), a: "a".charCodeAt(), z: "z".charCodeAt() };
+        plainCharCodes = encryptedCharCodes.map((num) => {
+          if (num >= letters.A && num <= letters.Z) {
+            normalizedNum = num - letters.A;
+            if (normalizedNum - shift < 0) {
+              normalizedNum = 26 + normalizedNum;
+            }
+            return ((normalizedNum - shift) % 26) + letters.A;
+          } else if (num >= letters.a && num <= letters.z) {
+            normalizedNum = num - letters.a;
+            if (normalizedNum - shift < 0) {
+              normalizedNum = 26 + normalizedNum;
+            }
+            return ((normalizedNum - shift) % 26) + letters.a;
+          } else {
+            return num;
           }
-          
-          const plainTextArea = document.getElementById("plainText");
-          plainTextArea.value = decodedValues;
-        }
-      
-        /**
-         * Attempts to decrypt text that has been encrypted using as ceasar
-         * cipher. Only works with ASCII characters
-         * @param {int} shift - The number of letters to shift the alphabet.
-         * @param {encryptedText} - The encrypted text to be decrpyted.
-         */
-        function ceasarDecode(shift, encryptedText) {
-          encryptedArray = encryptedText.split("");
-          encryptedCharCodes = encryptedArray.map((char) => char.charCodeAt(0));    
-          const letters = {A: 'A'.charCodeAt(),
-                           Z: 'Z'.charCodeAt(),
-                           a: 'a'.charCodeAt(),
-                           z: 'z'.charCodeAt()}
-          plainCharCodes = encryptedCharCodes.map((num) => {
-            if (num >= letters.A && num <= letters.Z) {
-              normalizedNum = num - letters.A;
-              if (normalizedNum - shift < 0) {
-                normalizedNum = 26 + normalizedNum;
-              }
-              return (normalizedNum - shift) % 26 + letters.A;
-            } else if (num >= letters.a && num <= letters.z) {
-                normalizedNum = num - letters.a;
-                if (normalizedNum - shift < 0) {
-                  normalizedNum = 26 + normalizedNum;
-                }
-                return (normalizedNum - shift) % 26 + letters.a;           
-            } else {
-                return num;
-            }          
-          });
-          plainLetters = plainCharCodes.map((num) => String.fromCharCode(num));
-          return plainLetters.join('');
-          
-        }
-        
-        function copyToClipboard() {
-          const plainTextArea = document.getElementById("plainText");
-          const plainText = plainTextArea.value;
-          navigator.clipboard.writeText(plainText).then(
-            () => {
-              /* clipboard successfully set */
-              const copyBtn = document.getElementById("copyBtn")
-              const originalBtnText = copyBtn.textContent;
-              copyBtn.textContent = "Copied!";
-              setTimeout(function () {
-                copyBtn.textContent = originalBtnText;
-              }, 2000);              
-            },
-            () => {
-              /* clipboard write failed */
-              console.log("Copy to clipboard failed.");
-            },
-          );
-        }    
-      </script>
-    </body>
+        });
+        plainLetters = plainCharCodes.map((num) => String.fromCharCode(num));
+        return plainLetters.join("");
+      }
+
+      function copyToClipboard() {
+        const plainTextArea = document.getElementById("plainText");
+        const plainText = plainTextArea.value;
+        navigator.clipboard.writeText(plainText).then(
+          () => {
+            /* clipboard successfully set */
+            const copyBtn = document.getElementById("copyBtn");
+            const originalBtnText = copyBtn.textContent;
+            copyBtn.textContent = "Copied!";
+            setTimeout(function () {
+              copyBtn.textContent = originalBtnText;
+            }, 2000);
+          },
+          () => {
+            /* clipboard write failed */
+            console.log("Copy to clipboard failed.");
+          }
+        );
+      }
+    </script>
+  </body>
 </html>
