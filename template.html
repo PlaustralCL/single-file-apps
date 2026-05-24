@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Template</title>
+    <style>
+      html {
+        max-width: 70ch;
+        padding: 1em 1em;
+        margin: auto;
+        line-height: 1.25;
+        font-size: 1.25em;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Template</h1>
+    <h2>Input</h2>
+    <textarea id="inputText" rows="10" cols="60"></textarea>
+    <button onclick="processInput()">Process Input</button>
+
+    <h2>Output</h2>
+    <textarea id="outputText" rows="10" cols="60" readonly></textarea>
+    <button id="copyBtn" onclick="copyToClipboard()">Copy to clipboard</button>
+
+    <footer><a href="#">Link</a></footer>
+
+    <script>
+      function processInput() {
+        // Get input
+        const inputTextArea = document.getElementById("inputText");
+        const inputText = inputTextArea.value;
+
+        // Set output
+        const outpoutTextArea = document.getElementById("outputText");
+
+        // Change this as needed
+        outpoutTextArea.value = inputText.toUpperCase();
+      }
+
+      function copyToClipboard() {
+        const outputTextArea = document.getElementById("outputText");
+        const outputText = outputTextArea.value;
+        navigator.clipboard.writeText(outputText).then(
+          () => {
+            /* clipboard successfully set */
+            const copyBtn = document.getElementById("copyBtn");
+            const originalBtnText = copyBtn.textContent;
+            copyBtn.textContent = "Copied!";
+            setTimeout(function () {
+              copyBtn.textContent = originalBtnText;
+            }, 2000);
+          },
+          () => {
+            /* clipboard write failed */
+            console.log("Copy to clipboard failed.");
+          }
+        );
+      }
+    </script>
+  </body>
+</html>
