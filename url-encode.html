@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>URL Encode</title>
+        <style>
+            html {
+                max-width: 70ch;
+                padding: 1em 1em;
+                margin: auto;
+                line-height: 1.25;
+                font-size: 1.25em;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>URL Encode</h1>
+        <h2>Input</h2>
+        <textarea id="inputText" rows="10" cols="60"></textarea>
+        <button onclick="processInput()">Encode</button>
+
+        <h2>Output</h2>
+        <textarea id="outputText" rows="10" cols="60" readonly></textarea>
+        <button id="copyBtn" onclick="copyToClipboard()">Copy to clipboard</button>
+
+        <footer><a href="#">Link</a></footer>
+
+        <script>
+          const symbols = {
+            ":": "%3A",
+            '/': "%2F",
+            '?': "%3F",
+            '#': "%23",
+            '[': "%5B",
+            ']': "%5D",
+            '@': "%40",
+            '!': "%21",
+            '$': "%24",
+            '&': "%26",
+            "'": "%27",
+            '(': "%28",
+            ')': "%29",
+            '*': "%2A",
+            '+': "%2B",
+            ',': "%2C",
+            ';': "%3B",
+            '=': "%3D",
+            '%': "%25",
+            ' ': "%20"
+          }
+
+        function processInput() {
+          // Get input
+          const inputTextArea = document.getElementById("inputText");
+          const inputText = inputTextArea.value;
+          encodedString = "";
+
+          for (const char of inputText) {
+            if (Object.hasOwn(symbols, char)) {
+              encodedString += symbols[char]
+            } else {
+              encodedString += char;
+            }
+
+          }
+
+          // Set output
+          const outpoutTextArea = document.getElementById("outputText");
+
+          outpoutTextArea.value = encodedString;
+        }
+
+        function copyToClipboard() {
+          const outputTextArea = document.getElementById("outputText");
+          const outputText = outputTextArea.value;
+          navigator.clipboard.writeText(outputText).then(
+            () => {
+              /* clipboard successfully set */
+              const copyBtn = document.getElementById("copyBtn");
+              const originalBtnText = copyBtn.textContent;
+              copyBtn.textContent = "Copied!";
+              setTimeout(function () {
+                copyBtn.textContent = originalBtnText;
+              }, 2000);
+            },
+            () => {
+              /* clipboard write failed */
+              console.log("Copy to clipboard failed.");
+            }
+          );
+        }
+      </script>
+    </body>
+</html>
